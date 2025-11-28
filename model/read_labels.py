@@ -18,6 +18,3 @@ def read_file_labels(path: Path) -> pd.DataFrame:
     df = pd.read_csv(path, sep=' ', names=names)
     print(df)
     return df
-
-
-read_file_labels(Path("labels.txt"))

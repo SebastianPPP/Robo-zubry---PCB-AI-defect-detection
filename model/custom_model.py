@@ -1,7 +1,8 @@
+from pathlib import Path
+
 import numpy as np
 import cv2
 from ultralytics import YOLO
-import tqdm
 import torch
 from torch.utils.data import Dataset, DataLoader
 from torchvision import datasets
@@ -10,11 +11,28 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from torchvision.io import decode_image
 import os
+from read_labels import read_file_labels
 
 # data dirs
+TRAIN_IMG_PATH = Path('./data_custom/train/images')
+TRAIN_LABEL_PATH = Path('./data_custom/train/labels')
 
+TEST_IMG_PATH = Path('./data_custom/test/images')
+TEST_LABEL_PATH = Path('./data_custom/test/labels')
+
+VAL_IMG_PATH = Path('./data_custom/val/images')
+VAL_LABEL_PATH = Path('./data_custom/val/labels')
 # load data
+X_train = [path for path in TRAIN_IMG_PATH.iterdir()]
+y_train = [read_file_labels(path)['Type'] for path in TRAIN_LABEL_PATH.iterdir()]
 
+X_test = [path for path in TEST_IMG_PATH.iterdir()]
+y_test = [read_file_labels(path)['Type'] for path in TEST_LABEL_PATH.iterdir()]
+
+X_val = [path for path in VAL_IMG_PATH.iterdir()]
+y_val = [read_file_labels(path)['Type'] for path in VAL_LABEL_PATH.iterdir()]
+
+print(len(X_train), len(y_train), len(X_val), len(y_val), len(X_test), len(y_test))
 # map data
 
 # preprocessing
