@@ -1,7 +1,7 @@
 import sys
 import cv2
 from prediction import predict_img
-from const import YOLO_11N_320_E10
+from const import YOLO_11N_320_E10, YOLO_V8N_160_E8, YOLO_V11_SMALL
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QLabel, QPushButton, QFileDialog, QVBoxLayout,
     QHBoxLayout, QComboBox
@@ -89,9 +89,9 @@ class ImageProcessor(QWidget):
         self.button_layout.addWidget(combobox_title)
 
         combobox1 = QComboBox()
-        combobox1.addItem('One')
-        combobox1.addItem('Two')
-        combobox1.addItem('Three')
+        combobox1.addItem('YOLO_11N_320_E10')
+        combobox1.addItem('YOLO_V11_SMALL')
+        combobox1.addItem('YOLO_V8N_160_E8')
         combobox1.addItem('Four')
         combobox1.setStyleSheet("""
             background-color: #262626;
@@ -152,11 +152,17 @@ class ImageProcessor(QWidget):
         self.setLayout(self.main_layout)
 
     def activated(self, index):
+        global model
         if (index == 0):
-            global model
             model = YOLO_11N_320_E10
             #loaded_model = load_model("model_11n_15e.h5")
             #predict_img(YOLO_11N_320_E10, random_val_img=True)
+            print("Activated index:", index)
+        if (index == 1):
+            model = YOLO_V11_SMALL
+            print("Activated index:", index)
+        if (index == 2):
+            model = YOLO_V8N_160_E8
             print("Activated index:", index)
 
     def load_image(self):
