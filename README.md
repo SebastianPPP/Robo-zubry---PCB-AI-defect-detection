@@ -8,4 +8,4 @@ Przygotowanie aplikacji GUI do prezentacji wyników.
 Przygotowanie prezentacji opisującej proces.
 
 
-(Link do datasetu:)[https://www.kaggle.com/datasets/norbertelter/pcb-defect-dataset]
+[Link do datasetu:](https://www.kaggle.com/datasets/norbertelter/pcb-defect-dataset)
