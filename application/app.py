@@ -1,14 +1,15 @@
 import sys
 import cv2
-import numpy as np
+from prediction import predict_img
+from const import YOLO_11N_320_E10
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QLabel, QPushButton, QFileDialog, QVBoxLayout,
-    QHBoxLayout, QFormLayout, QLineEdit, QComboBox, QDialog, QMainWindow, QTabWidget, QGridLayout
+    QHBoxLayout, QComboBox
 )
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtCore import Qt
-from layout_colorwidget import Color
-from boxes_example import boxes
+
+
 #from tensorflow.keras.models import load_model
 
 
@@ -142,6 +143,7 @@ class ImageProcessor(QWidget):
     def activated(self, index):
         if (index == 0):
             #loaded_model = load_model("model_11n_15e.h5")
+            predict_img(YOLO_11N_320_E10, random_val_img=True)
             print("Activated index:", index)
 
     def load_image(self):
