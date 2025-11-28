@@ -22,7 +22,8 @@ We focused on two datasets we found. Ultimately, however, we decided that option
 - open circuit,
 - short,
 - spur,
-- spurious copper.
+- spurious copper.  
+
  However, the set we selected, in addition to identifying the appropriate error category, also included information about the location of the bounding box—the position of the defect on the PCB. We consider this a significant advantage over option 2. Another important advantage of our preferred option was that the data was already augmented (easier data preprocessing; normalization remains). The second set, on the other hand, was based on graphics representing entire boards, not just zoomed-in fragments like set 1, but this advantage wasn't sufficient to forgo the other benefits.  
 
 The augmented dataset contains 10668 images and the corresponding annotation files.
