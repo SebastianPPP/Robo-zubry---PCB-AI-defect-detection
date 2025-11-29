@@ -5,13 +5,15 @@ import cv2
 from ultralytics import YOLO
 import torch
 from torch.utils.data import Dataset, DataLoader
-from torchvision import datasets
+from torchvision import datasets, models
 from torchvision.transforms import ToTensor
 import matplotlib.pyplot as plt
 import pandas as pd
 from torchvision.io import decode_image
 import os
 from read_labels import read_file_labels
+import torch.nn as nn
+import torch.nn.functional as F
 
 # data dirs
 TRAIN_IMG_PATH = Path('./data_custom/train/images')
@@ -60,10 +62,31 @@ class CustomDataset(Dataset):
             label = self.target_transform(label)
         return image, label
     
-train_dataloader = DataLoader(training_data, batch_size=64, shuffle=True)
-test_dataloader = DataLoader(test_data, batch_size=64, shuffle=True)
-
+train_dataloader = DataLoader(X_train, batch_size=64, shuffle=True)
+test_dataloader = DataLoader(X_test, batch_size=64, shuffle=True)
+val_dataloader = DataLoader(X_val, batch_size=64, shuffle=True)
 # model architecture
+
+class CNN_model(nn.module):
+    def __init__(self, num_classes=6):
+        super(CNN_model, self).__init__()
+        self.num_classes = num_classes
+        self.conv2d_1 = nn.Conv2d(3, 16, kernel_size = 4, stride = 2)
+        self.conv2d_2 = nn.Conv2d(16, 16, kernel_size = 4, stride = 2)
+        self.fc1 = nn.Linear(6400, 128)
+        self.fc2 = nn.Linear(128, 6)  
+
+    def forward(self, x):
+        x = self.conv2d_1(x)
+        x = F.relu(x)
+        x = self.conv2d_2(x)
+        x = torch.flatten(x,1)
+        x = self.fc1(x)
+        x = F.relu(x)
+        x = self.fc2(x)
+
+        output = F.log_softmax(x, dim=1)
+        return output
 
 # training
 
