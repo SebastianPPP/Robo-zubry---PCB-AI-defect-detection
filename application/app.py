@@ -1,7 +1,7 @@
 import sys
 import cv2
 from prediction import predict_img
-from const import YOLO_11N_320_E10, YOLO_V8N_160_E8, YOLO_V11_SMALL
+from const import YOLO_11N_320_E10, YOLO_V8N_160_E8, YOLO_V11_SMALL, BINARY, GRAYSCALE, YOLO_V5NU
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QLabel, QPushButton, QFileDialog, QVBoxLayout,
     QHBoxLayout, QComboBox
@@ -28,26 +28,33 @@ class ImageProcessor(QWidget):
         self.main_layout = QVBoxLayout()
         self.setLayout(self.main_layout)
 
+        self.title_layout = QHBoxLayout()
         self.image_layout = QHBoxLayout()
         self.panel_layout = QHBoxLayout()
         self.button_layout = QVBoxLayout()
         self.defects_layout = QVBoxLayout()
+        
 
-        image_title = QLabel("PCB Defects Detection")
-        image_title.setStyleSheet("""
+        self.image_title = QLabel("PCB Defects Detection")
+        self.image_title.setFixedHeight(40)
+        self.image_title.setStyleSheet("""
                 color: #000000;               
                 font: 75 10pt "Microsoft YaHei UI";
                 font-weight: bold;
                 font-size: 25px;
                 """)
-        font = image_title.font()
+        font = self.image_title.font()
         font.setPointSize(15)
-        image_title.setFont(font)
-        image_title.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        self.main_layout.addWidget(image_title)
+        self.image_title.setFont(font)
+        self.image_title.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
+        self.title_layout.addWidget(self.image_title)
+        self.main_layout.addLayout(self.title_layout)
+
+
 
         self.original_label = QLabel("Original PCB Image")
         self.original_label.setAlignment(Qt.AlignCenter)
+        #self.original_label.setFixedHeight(400)
         #self.original_label.setFixedSize(400, 400)
         self.original_label.setStyleSheet("""
             background-color: #262626;
@@ -60,6 +67,7 @@ class ImageProcessor(QWidget):
 
         self.processed_label = QLabel("Image with Detected Defects")
         self.processed_label.setAlignment(Qt.AlignCenter)
+        #self.processed_label.setFixedHeight(400)
         #self.processed_label.setFixedSize(400, 400)
         self.processed_label.setStyleSheet("""
             background-color: #262626;
@@ -76,6 +84,7 @@ class ImageProcessor(QWidget):
 
 
         combobox_title = QLabel("Choose Model")
+        combobox_title.setFixedHeight(50)
         combobox_title.setStyleSheet("""
             background-color: #262626;
             qproperty-alignment: AlignCenter;
@@ -96,7 +105,9 @@ class ImageProcessor(QWidget):
         combobox1.addItem('YOLO_11N_320_E10')
         combobox1.addItem('YOLO_V11_SMALL')
         combobox1.addItem('YOLO_V8N_160_E8')
-        combobox1.addItem('Four')
+        combobox1.addItem('BINARY')
+        combobox1.addItem('GRAYSCALE')
+        combobox1.addItem('YOLO_V5NU')
         combobox1.setStyleSheet("""
             background-color: #262626;
                 border-radius: 12px;
@@ -137,6 +148,7 @@ class ImageProcessor(QWidget):
         
         #Legenda z tytułem
         legend_title = QLabel("Legend")
+        legend_title.setFixedHeight(40)
         legend_title.setStyleSheet("""
             background-color: #262626;
                 border-radius: 12px;
@@ -152,6 +164,7 @@ class ImageProcessor(QWidget):
         self.defects_layout.addWidget(legend_title)
 
         legend = QLabel("🟢 - Mouse bite \n 🟠 - Spur \n 🔴 - Missing Hole \n 🔵 - Short \n 🟡 - Open circuit \n 🟣 - Spurious copper")
+        legend.setFixedHeight(150)
         legend.setStyleSheet("""
             background-color: #262626;
                 border-radius: 12px;
@@ -165,6 +178,8 @@ class ImageProcessor(QWidget):
         legend.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         self.defects_layout.addWidget(legend)
 
+        
+        
         self.main_layout.addLayout(self.image_layout)
         self.main_layout.addLayout(self.panel_layout)
         self.panel_layout.addLayout(self.button_layout)
@@ -184,6 +199,16 @@ class ImageProcessor(QWidget):
         if (index == 2):
             model = YOLO_V8N_160_E8
             print("Activated index:", index)
+        if (index == 3):
+            model = BINARY
+            print("Activated index:", index)
+        if (index == 4):
+            model = GRAYSCALE
+            print("Activated index:", index)
+        if (index == 5):
+            model = YOLO_V5NU
+            print("Activated index:", index)
+
 
     def load_image(self):
         file_name, _ = QFileDialog.getOpenFileName(self, "Open Image", "", "Images (*.png *.jpg *.bmp)")
@@ -262,7 +287,9 @@ class ImageProcessor(QWidget):
                 label_img = int(label1[0])
                 color = colors[label_img]
                 print(color)
+                score1 = str(score1[0])
                 label_text = labels_dict[label_img]
+                label_text = label_text + ", " + score1[:4]
                 cv2.rectangle(self.image, startpoint, endpoint, color, thickness=3)
                 cv2.putText(self.image, label_text, (int(box[0][0]), int(box[0][1])-10), cv2.FONT_HERSHEY_COMPLEX, 0.9, (0,0,0), 6, cv2.LINE_AA)
                 cv2.putText(self.image, label_text, (int(box[0][0]), int(box[0][1])-10), cv2.FONT_HERSHEY_COMPLEX, 0.9, (255,255,255), 1, cv2.LINE_AA)

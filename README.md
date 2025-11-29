@@ -117,6 +117,12 @@ Examples of the obtained metrics are presented below:
 ![](./readme_metrics/v11_binary/BoxF1_curve.png)
 ![](./readme_metrics/v11_binary/BoxP_curve.png)
 
+### Model YOLOv5nu - epochs=10, image size=320:
+
+![](./readme_metrics/v5/confusion_matrix_normalized.png)
+![](./readme_metrics/v5/BoxF1_curve.png)
+![](./readme_metrics/v5/BoxP_curve.png)
+
 ### Summary:
 
 Based on tested models we can conclude that:

@@ -39,3 +39,6 @@ DATA_VAL_LABELS_DIR.mkdir(parents=True, exist_ok=True)
 YOLO_V8N_160_E8 = 'YOLO_V8N_160_E8.pt'
 YOLO_11N_320_E10 = 'v11n10e320.pt'
 YOLO_V11_SMALL = 'v11_small.pt'
+BINARY = "binary.pt"
+GRAYSCALE = "grayscale.pt"
+YOLO_V5NU = "YOLO_V5NU.pt"
