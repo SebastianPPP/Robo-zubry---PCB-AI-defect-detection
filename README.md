@@ -1,4 +1,19 @@
 # PCB Defect Detection
+## Table of context
+- [Design Assumptions](#design-assumptions)
+- [Dataset Selection](#dataset-selection)
+- [Data Preprocessing](#data-preprocessing)
+- [Model](#model)
+    - [Model YOLOv8n - epochs=10, image size=160](#model-yolov8nu---epochs10-image-size160)
+    - [Model YOLOv8n - epochs=10, image size=320](#model-yolov8n---epochs10-image-size320)
+    -[Model YOLO11n - epochs=10, image size=320](#model-yolo11n---epochs10-image-size320)
+    - [### Model YOLO11n - epochs=10, image size=320, reduced dataset](#model-yolo11n---epochs10-image-size320-reduced-dataset)
+    - [Model YOLO11n - epochs=10, image size=320, grayscale](#model-yolo11n---epochs10-image-size320-grayscale)
+    - [Model YOLO11n - epochs=10, image size=320, binary treshold](#model-yolo11n---epochs10-image-size320-binary-treshold)
+    - [Summary](#summary)
+- [GUI](#gui)
+- [Authors](#authors)
+
 ## Design Assumptions:
 
 The project will utilize ready-made datasets containing graphics of typical PCB defects (Justify the dataset selection).  
@@ -41,7 +56,7 @@ We chose YOLO because it allows for a simple implementation of simultaneous dete
 
 Examples of the obtained metrics are presented below:
 
-### Model YOLOv8nu - epochs=10, image size=160:
+### Model YOLOv8n - epochs=10, image size=160:
 
 ![](./readme_metrics/v8_small/confusion_matrix_normalized.png)
 ![](./readme_metrics/v8_small/BoxF1_curve.png)
@@ -77,8 +92,20 @@ Examples of the obtained metrics are presented below:
 ![](./readme_metrics/v11_binary/BoxF1_curve.png)
 ![](./readme_metrics/v11_binary/BoxP_curve.png)
 
-### Wnioski:
+### Summary:
+
+Based on tested models we can conclude that:
+1. The easiest defect for detection is a missing hole in PCB plate
+2. Image compression to 160x160 from based 600x600 is too much compression and leads to not well trained model (possible due too information loss during resizing).
+3. Accuracy and other metrics are simmilar to each other for other version of model.
+4. Preprocessing data with grayscale or binary threashold leads model to better detection some defects like `open_circuit` but also to worse accuracy in others labels, which make this usage more specialized into some kind of defect
 
 ## GUI
 
-The GUI, like the model, is prepared in a Python environment; we use the PyQT5 library for the GUI. The main purpose of the GUI is to load an image to classify potential defects and identify their location on the PCB.
+The GUI, like the model, is prepared in a Python environment; we use the PyQT5 framework for the user interface. The main purpose of the GUI is to load an image to classify potential defects and identify their location on the PCB. User can select from a list of models a specific one that will be used
+
+### Authors:
+1. [Sebastian](@SebastianPPP)
+2. [Kamil](@KamilP-git)
+3. [Alicja](@salicja642)
+4. [Piotr](@piotrh5)
