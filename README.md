@@ -77,7 +77,7 @@ Examples of the obtained metrics are presented below:
 ![](./readme_metrics/v11_binary/BoxF1_curve.png)
 ![](./readme_metrics/v11_binary/BoxP_curve.png)
 
-
+### Wnioski:
 
 ## GUI
 
